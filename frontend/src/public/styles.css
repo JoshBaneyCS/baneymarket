@@ -1,0 +1,38 @@
+/* styles.css */
+
+/* Basic resets and global styles */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  /* You can add any global styles you want here.
+     Tailwind or similar frameworks can also be used,
+     but if using them, you'd typically import them differently. */
+  
+  /* Example global styles */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  input, button {
+    font: inherit;
+    outline: none;
+  }
+  
+  table {
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid currentColor;
+    padding: 0.5rem;
+  }
+  
