@@ -1,77 +1,48 @@
 // src/App.js
 
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import NavBar from './components/NavBar';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import Dashboard from './pages/Dashboard';
-import LiveStocks from './pages/LiveStocks';
-import StockDetail from './pages/StockDetail';
-import Profile from './pages/Profile';
-import './styles.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import StockData from './components/StockData';
+import Home from './components/Home';
+import About from './components/About';
+import './App.css'; // Import custom CSS for styling
 
 const App = () => {
-  // Access the current theme from Redux store
-  const theme = useSelector((state) => state.theme.value);
-  
-  // Access authentication status from Redux store
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-
-  // Apply the theme by adding/removing the 'dark' class on the HTML element
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
   return (
     <Router>
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
-        {/* Navigation Bar */}
-        <NavBar />
+      <div className="App">
+        {/* Header Section with Navigation */}
+        <header className="App-header">
+          <h1>BaneyMarket Stock Trading Platform</h1>
+          <nav>
+            <ul className="nav-links">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/stock">Stock Data</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
 
-        {/* Main Content Area */}
-        <div className="container mx-auto p-4">
+        {/* Main Content Area with Routed Components */}
+        <main className="App-main">
           <Routes>
-            {/* Public Routes */}
-            <Route
-              path="/login"
-              element={!isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" replace />}
-            />
-            <Route
-              path="/register"
-              element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/dashboard" replace />}
-            />
-
-            {/* Protected Routes */}
-            <Route
-              path="/dashboard"
-              element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
-            />
-            <Route
-              path="/live-stocks"
-              element={isAuthenticated ? <LiveStocks /> : <Navigate to="/login" replace />}
-            />
-            <Route
-              path="/stocks/:id"
-              element={isAuthenticated ? <StockDetail /> : <Navigate to="/login" replace />}
-            />
-            <Route
-              path="/profile"
-              element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
-            />
-
-            {/* Redirect unknown routes */}
-            <Route
-              path="*"
-              element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />}
-            />
+            <Route path="/" element={<Home />} />
+            <Route path="/stock" element={<StockData />} />
+            <Route path="/about" element={<About />} />
+            {/* Add more routes here as your application grows */}
           </Routes>
-        </div>
+        </main>
+
+        {/* Footer Section */}
+        <footer className="App-footer">
+          <p>&copy; {new Date().getFullYear()} BaneyMarket. All rights reserved.</p>
+        </footer>
       </div>
     </Router>
   );
