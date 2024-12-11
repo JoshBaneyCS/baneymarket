@@ -1,5 +1,5 @@
 // src/components/StockData.js
-
+import './StockData.css';
 import React, { useState } from 'react';
 import { fetchStockData } from '../services/stockService';
 
