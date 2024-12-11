@@ -1,32 +1,17 @@
 // src/components/StockData.js
-import './StockData.css';
+
 import React, { useState } from 'react';
-import { fetchStockData } from '../services/stockService';
+import { useDispatch, useSelector } from 'react-redux';
+import { getStockData } from '../store/stockSlice';
 
 const StockData = () => {
   const [symbol, setSymbol] = useState('');
-  const [stockInfo, setStockInfo] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.stock);
 
-  const handleFetch = async () => {
-    if (!symbol) {
-      setError('Please enter a stock symbol.');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setStockInfo(null);
-
-    try {
-      const data = await fetchStockData(symbol.toUpperCase());
-      setStockInfo(data);
-    } catch (err) {
-      setError(err.response?.data?.detail || 'An unexpected error occurred.');
-    } finally {
-      setLoading(false);
-    }
+  const handleFetch = () => {
+    if (!symbol) return;
+    dispatch(getStockData(symbol.toUpperCase()));
   };
 
   return (
@@ -45,10 +30,10 @@ const StockData = () => {
 
       {error && <p className="error-message">{error}</p>}
 
-      {stockInfo && (
+      {data && (
         <div className="stock-info">
-          <h3>{stockInfo['Meta Data']?.['2. Symbol']}</h3>
-          <p>Last Refreshed: {stockInfo['Meta Data']?.['3. Last Refreshed']}</p>
+          <h3>{data['Meta Data']?.['2. Symbol']}</h3>
+          <p>Last Refreshed: {data['Meta Data']?.['3. Last Refreshed']}</p>
           <table>
             <thead>
               <tr>
@@ -61,8 +46,8 @@ const StockData = () => {
               </tr>
             </thead>
             <tbody>
-              {stockInfo['Time Series (Daily)'] &&
-                Object.entries(stockInfo['Time Series (Daily)']).map(([date, values]) => (
+              {data['Time Series (Daily)'] &&
+                Object.entries(data['Time Series (Daily)']).map(([date, values]) => (
                   <tr key={date}>
                     <td>{date}</td>
                     <td>{values['1. open']}</td>
